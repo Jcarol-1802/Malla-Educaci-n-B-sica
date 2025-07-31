@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Malla Curricular - Educación Básica</title>
+  <style>
+    body {
+      font-family: "Segoe UI", "Roboto", sans-serif;
+      background-color: #f0f8ff;
+      color: #003e6b;
+      margin: 0;
+      padding: 1rem;
+    }
+    h1 {
+      text-align: center;
+      color: #002f5f;
+    }
+    h2 {
+      background-color: #d0e9ff;
+      color: #002f5f;
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      margin-top: 2rem;
+    }
+    .semester {
+      margin-bottom: 2rem;
+    }
+    .subject {
+      background-color: #e8f4fd;
+      border: 1px solid #a6d4f2;
+      margin: 0.4rem 0;
+      padding: 0.6rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      position: relative;
+      transition: background-color 0.2s;
+    }
+    .subject.locked {
+      background-color: #d6d6d6;
+      color: #777;
+      cursor: not-allowed;
+    }
+    .subject.locked::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      left: 105%;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #003e6b;
+      color: #fff;
+      padding: 0.4rem;
+      border-radius: 0.4rem;
+      white-space: pre-wrap;
+      display: none;
+      width: 250px;
+      z-index: 10;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    .subject.locked:hover::after {
+      display: block;
+    }
+    .subject.completed {
+      background-color: #c2f0d3;
+      border-color: #75d6a2;
+      text-decoration: line-through;
+    }
+  </style>
+</head>
+<body>
+  <h1>Malla Curricular Interactiva - Educación Básica</h1>
+  <div id="curriculum"></div>
+
+  <script>
+    const data = [
+      { semester: "📘 Primer Semestre", subjects: [
+        { name: "Lenguaje y comunicación para la comprensión", prereqs: [] },
+        { name: "Enfoques epistemológicos de la investigación educativa", prereqs: [] },
+        { name: "Realidad contemporánea, política pública y modelo educativo", prereqs: [] },
+        { name: "Modelos de desarrollo y Buen Vivir", prereqs: [] },
+        { name: "Cátedra integradora: Diagnóstico de subnivel elemental de Educación General Básica, actores, instituciones y contextos", prereqs: [] },
+        { name: "Aproximación diagnóstica del Sumak Kawsay en los paradigmas y modelos educativos en la enseñanza de ciencias básicas del subnivel elemental en instituciones educativas específicas. Observación, participación y acompañamiento", prereqs: [] }
+      ]},
+      { semester: "📗 Segundo Semestre", subjects: [
+        { name: "Investigación - acción participativa: Historias de vida", prereqs: ["Enfoques epistemológicos de la investigación educativa"] },
+        { name: "Ecología del desarrollo humano, modelo pedagógico", prereqs: ["Modelos de desarrollo y Buen Vivir"] },
+        { name: "Manifestaciones artísticas y culturales ligadas a la educación", prereqs: [] },
+        { name: "Lenguaje y comunicación académica", prereqs: ["Lenguaje y comunicación para la comprensión"] },
+        { name: "Cátedra integradora: Diagnóstico del subnivel medio de Educación General Básica", prereqs: ["Cátedra integradora: Diagnóstico de subnivel elemental de Educación General Básica, actores, instituciones y contextos"] },
+        { name: "Aproximación diagnóstica del proceso educativo a partir de modelos pedagógicos del subnivel medio de Educación General Básica", prereqs: [] }
+      ]},
+      { semester: "📕 Tercer Semestre", subjects: [
+        { name: "Lenguaje y comunicación", prereqs: ["Lenguaje y comunicación académica"] },
+        { name: "Metodología de investigación educativa (enfoque con marco lógico)", prereqs: [
+          "Investigación - acción participativa: Historias de vida",
+          "Enfoques epistemológicos de la investigación educativa"
+        ]},
+        { name: "Diseño curricular para Educación General Básica", prereqs: ["Cátedra integradora: Diagnóstico del subnivel medio de Educación General Básica"] },
+        { name: "Desarrollo neuro cerebral y aprendizaje", prereqs: [] },
+        { name: "Cátedra integradora: Diagnóstico del manejo curricular de Educación General Básica adaptados a las necesidades culturales", prereqs: [
+          "Cátedra integradora: Diagnóstico del subnivel medio de Educación General Básica",
+          "Investigación - acción participativa: Historias de vida"
+        ]},
+        { name: "Aproximación diagnóstica a los modelos curriculares de ciencias básicas aplicadas en instituciones educativas", prereqs: [] }
+      ]},
+      { semester: "📙 Cuarto Semestre", subjects: [
+        { name: "Tecnologías de la información y comunicación (TIC) aplicadas al lenguaje y comunicación", prereqs: ["Lenguaje y comunicación"] },
+        { name: "Diagnóstico de problemas de investigación en instituciones educativas", prereqs: ["Metodología de investigación educativa (enfoque con marco lógico)"] },
+        { name: "Educación para la cognición situada en contextos diversos", prereqs: ["Desarrollo neuro cerebral y aprendizaje"] },
+        { name: "Educación intercultural e inclusiva", prereqs: [
+          "Manifestaciones artísticas y culturales ligadas a la educación",
+          "Modelos de desarrollo y Buen Vivir"
+        ]},
+        { name: "Cátedra integradora: Diagnóstico del proceso educativo en contextos rurales e interculturales", prereqs: [
+          "Cátedra integradora: Diagnóstico del manejo curricular de Educación General Básica adaptados a las necesidades culturales",
+          "Diagnóstico de problemas de investigación en instituciones educativas"
+        ]},
+        { name: "Vinculación con la colectividad I", prereqs: [] }
+      ]},
+      { semester: "📒 Quinto Semestre", subjects: [
+        { name: "Estrategias metodológicas para lengua, literatura y matemática", prereqs: ["Tecnologías de la información y comunicación (TIC) aplicadas al lenguaje y comunicación"] },
+        { name: "Taller de lenguaje del plan de investigación", prereqs: ["Tecnologías de la información y comunicación (TIC) aplicadas al lenguaje y comunicación"] },
+        { name: "Diseño y planificación de la investigación", prereqs: ["Diagnóstico de problemas de investigación en instituciones educativas"] },
+        { name: "Metodología para el aprendizaje de ciencias sociales y naturales", prereqs: [] },
+        { name: "Cátedra integradora: Estrategias activas para el desarrollo de una evaluación educativa", prereqs: [
+          "Cátedra integradora: Diagnóstico del proceso educativo en contextos rurales e interculturales",
+          "Diseño y planificación de la investigación"
+        ]},
+        { name: "Vinculación con la colectividad II", prereqs: ["Vinculación con la colectividad I"] }
+      ]},
+      { semester: "📘 Sexto Semestre", subjects: [
+        { name: "Lectura crítica", prereqs: ["Taller de lenguaje del plan de investigación"] },
+        { name: "Elaboración del proyecto de investigación", prereqs: ["Diseño y planificación de la investigación"] },
+        { name: "Procesos didácticos críticos para la lengua, literatura y matemática", prereqs: ["Estrategias metodológicas para lengua, literatura y matemática"] },
+        { name: "Metodología sistemática en el aprendizaje de ciencias naturales y ciencias sociales", prereqs: ["Metodología para el aprendizaje de ciencias sociales y naturales"] },
+        { name: "Diseño, ejecución y evaluación de procesos didácticos en las ciencias básicas de Educación General Básica en subnivel medio", prereqs: [
+          "Aproximación diagnóstica a los modelos curriculares de ciencias básicas aplicadas en instituciones educativas"
+        ]},
+        { name: "Cátedra integradora: Reflexión sobre la aplicación de procesos didácticos para la enseñanza-aprendizaje y evaluación en Educación General Básica", prereqs: [
+          "Cátedra integradora: Estrategias activas para el desarrollo de una evaluación educativa",
+          "Metodología para el aprendizaje de ciencias sociales y naturales"
+        ]}
+      ]},
+      { semester: "📗 Séptimo Semestre", subjects: [
+        { name: "Taller de escritura del plan de investigación", prereqs: [
+          "Elaboración del proyecto de investigación",
+          "Lectura crítica"
+        ]},
+        { name: "Ejecución del diseño de investigación", prereqs: [
+          "Cátedra integradora: Reflexión sobre la aplicación de procesos didácticos para la enseñanza-aprendizaje y evaluación en Educación General Básica",
+          "Elaboración del proyecto de investigación"
+        ]},
+        { name: "Diseño curricular para la lengua, literatura y matemática superior", prereqs: [
+          "Estrategias metodológicas para lengua, literatura y matemática",
+          "Procesos didácticos críticos para la lengua, literatura y matemática"
+        ]},
+        { name: "Procesos experienciales en el entorno natural, histórico y cultural", prereqs: [
+          "Metodología sistemática en el aprendizaje de ciencias naturales y ciencias sociales"
+        ]},
+        { name: "Diseño, aplicación y evaluación del currículo de las áreas básicas en el subnivel superior", prereqs: [
+          "Diseño, ejecución y evaluación de procesos didácticos en las ciencias básicas de Educación General Básica en subnivel medio"
+        ]},
+        { name: "Cátedra integradora: Análisis crítico al diseño curricular de las áreas básicas en el subnivel superior de Educación General Básica", prereqs: [
+          "Cátedra integradora: Reflexión sobre la aplicación de procesos didácticos para la enseñanza-aprendizaje y evaluación en Educación General Básica",
+          "Diseño curricular para la lengua, literatura y matemática superior"
+        ]}
+      ]},
+      { semester: "📕 Octavo Semestre", subjects: [
+        { name: "Software educativo", prereqs: ["Tecnologías de la información y comunicación (TIC) aplicadas al lenguaje y comunicación"] },
+        { name: "Gestión del aprendizaje en Educación Física y Educación Cultural y Artística", prereqs: [] },
+        { name: "Trabajo de titulación I", prereqs: [
+          "Ejecución del diseño de investigación",
+          "Taller de escritura del plan de investigación"
+        ]},
+        { name: "Cátedra integradora: Integración del proceso educativo con áreas específicas a través de proyectos", prereqs: [
+          "Cátedra integradora: Análisis crítico al diseño curricular de las áreas básicas en el subnivel superior de Educación General Básica",
+          "Software educativo",
+          "Gestión del aprendizaje en Educación Física y Educación Cultural y Artística",
+          "Trabajo de titulación I"
+        ]},
+        { name: "Gestión metodológica en áreas específicas de Educación General Básica en áreas de Educación Física y Educación Cultural y Artística", prereqs: [
+          "Diseño, aplicación y evaluación del currículo de las áreas básicas en el subnivel superior"
+        ]}
+      ]},
+      { semester: "📒 Noveno Semestre", subjects: [
+        { name: "Pensamiento crítico", prereqs: [] },
+        { name: "Trabajo de titulación II", prereqs: ["Trabajo de titulación I"] },
+        { name: "Gestión institucional a partir de la evaluación y planificación estratégica: Ética personal y social", prereqs: [
+          "Cátedra integradora: Integración del proceso educativo con áreas específicas a través de proyectos",
+          "Trabajo de titulación I"
+        ]},
+        { name: "Cátedra integradora: Participación en la gestión institucional en las dimensiones de evaluación administrativa y pedagógica", prereqs: [
+          "Cátedra integradora: Integración del proceso educativo con áreas específicas a través de proyectos"
+        ]},
+        { name: "Desarrollo de procesos de gestión institucional administrativa y pedagógica en unidades educativas o escuelas básicas", prereqs: [
+          "Gestión metodológica en áreas específicas de Educación General Básica en áreas de Educación Física y Educación Cultural y Artística"
+        ]}
+      ]}
+    ];
+
+    const savedProgress = JSON.parse(localStorage.getItem("progress") || "{}");
+
+    function renderCurriculum() {
+      const container = document.getElementById("curriculum");
+      container.innerHTML = "";
+      const completed = new Set(Object.keys(savedProgress).filter(k => savedProgress[k]));
+
+      data.forEach(block => {
+        const section = document.createElement("div");
+        section.className = "semester";
+        const title = document.createElement("h2");
+        title.textContent = block.semester;
+        section.appendChild(title);
+
+        block.subjects.forEach(subject => {
+          const div = document.createElement("div");
+          div.className = "subject";
+          div.textContent = subject.name;
+          div.dataset.name = subject.name;
+
+          const unmet = subject.prereqs.filter(p => !completed.has(p));
+          if (unmet.length > 0) {
+            div.classList.add("locked");
+            div.dataset.tooltip = "Faltan:\n" + unmet.join("\n");
+          } else {
+            div.addEventListener("click", () => {
+              const current = savedProgress[subject.name];
+              savedProgress[subject.name] = !current;
+              localStorage.setItem("progress", JSON.stringify(savedProgress));
+              renderCurriculum();
+            });
+          }
+
+          if (savedProgress[subject.name]) {
+            div.classList.add("completed");
+          }
+
+          section.appendChild(div);
+        });
+
+        container.appendChild(section);
+      });
+    }
+
+    renderCurriculum();
+  </script>
+</body>
+</html>
