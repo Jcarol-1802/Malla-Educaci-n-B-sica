@@ -4,27 +4,38 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Malla Curricular - Educación Básica</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: "Segoe UI", "Roboto", sans-serif;
+      font-family: 'Nunito', sans-serif;
       background-color: #f0f8ff;
       color: #003e6b;
       margin: 0;
       padding: 1rem;
+      overflow-x: auto;
     }
     h1 {
       text-align: center;
       color: #002f5f;
     }
-    h2 {
-      background-color: #d0e9ff;
-      color: #002f5f;
-      padding: 0.5rem;
-      border-radius: 0.5rem;
-      margin-top: 2rem;
+    #curriculum {
+      display: flex;
+      gap: 1rem;
+      padding-bottom: 2rem;
+      min-width: max-content;
     }
     .semester {
-      margin-bottom: 2rem;
+      min-width: 280px;
+      flex-shrink: 0;
+      background-color: #d0e9ff;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .semester h2 {
+      font-size: 1.1rem;
+      color: #002f5f;
+      margin-bottom: 0.5rem;
     }
     .subject {
       background-color: #e8f4fd;
@@ -73,7 +84,7 @@
 
   <script>
     const data = [
-      { semester: "📘 Primer Semestre", subjects: [
+      { semester: "Primer Semestre", subjects: [
         { name: "Lenguaje y comunicación para la comprensión", prereqs: [] },
         { name: "Enfoques epistemológicos de la investigación educativa", prereqs: [] },
         { name: "Realidad contemporánea, política pública y modelo educativo", prereqs: [] },
@@ -81,7 +92,7 @@
         { name: "Cátedra integradora: Diagnóstico de subnivel elemental de Educación General Básica, actores, instituciones y contextos", prereqs: [] },
         { name: "Aproximación diagnóstica del Sumak Kawsay en los paradigmas y modelos educativos en la enseñanza de ciencias básicas del subnivel elemental en instituciones educativas específicas. Observación, participación y acompañamiento", prereqs: [] }
       ]},
-      { semester: "📗 Segundo Semestre", subjects: [
+      { semester: "Segundo Semestre", subjects: [
         { name: "Investigación - acción participativa: Historias de vida", prereqs: ["Enfoques epistemológicos de la investigación educativa"] },
         { name: "Ecología del desarrollo humano, modelo pedagógico", prereqs: ["Modelos de desarrollo y Buen Vivir"] },
         { name: "Manifestaciones artísticas y culturales ligadas a la educación", prereqs: [] },
@@ -89,7 +100,7 @@
         { name: "Cátedra integradora: Diagnóstico del subnivel medio de Educación General Básica", prereqs: ["Cátedra integradora: Diagnóstico de subnivel elemental de Educación General Básica, actores, instituciones y contextos"] },
         { name: "Aproximación diagnóstica del proceso educativo a partir de modelos pedagógicos del subnivel medio de Educación General Básica", prereqs: [] }
       ]},
-      { semester: "📕 Tercer Semestre", subjects: [
+      { semester: "Tercer Semestre", subjects: [
         { name: "Lenguaje y comunicación", prereqs: ["Lenguaje y comunicación académica"] },
         { name: "Metodología de investigación educativa (enfoque con marco lógico)", prereqs: [
           "Investigación - acción participativa: Historias de vida",
@@ -103,7 +114,7 @@
         ]},
         { name: "Aproximación diagnóstica a los modelos curriculares de ciencias básicas aplicadas en instituciones educativas", prereqs: [] }
       ]},
-      { semester: "📙 Cuarto Semestre", subjects: [
+      { semester: "Cuarto Semestre", subjects: [
         { name: "Tecnologías de la información y comunicación (TIC) aplicadas al lenguaje y comunicación", prereqs: ["Lenguaje y comunicación"] },
         { name: "Diagnóstico de problemas de investigación en instituciones educativas", prereqs: ["Metodología de investigación educativa (enfoque con marco lógico)"] },
         { name: "Educación para la cognición situada en contextos diversos", prereqs: ["Desarrollo neuro cerebral y aprendizaje"] },
@@ -117,7 +128,7 @@
         ]},
         { name: "Vinculación con la colectividad I", prereqs: [] }
       ]},
-      { semester: "📒 Quinto Semestre", subjects: [
+      { semester: "Quinto Semestre", subjects: [
         { name: "Estrategias metodológicas para lengua, literatura y matemática", prereqs: ["Tecnologías de la información y comunicación (TIC) aplicadas al lenguaje y comunicación"] },
         { name: "Taller de lenguaje del plan de investigación", prereqs: ["Tecnologías de la información y comunicación (TIC) aplicadas al lenguaje y comunicación"] },
         { name: "Diseño y planificación de la investigación", prereqs: ["Diagnóstico de problemas de investigación en instituciones educativas"] },
@@ -128,7 +139,7 @@
         ]},
         { name: "Vinculación con la colectividad II", prereqs: ["Vinculación con la colectividad I"] }
       ]},
-      { semester: "📘 Sexto Semestre", subjects: [
+      { semester: "Sexto Semestre", subjects: [
         { name: "Lectura crítica", prereqs: ["Taller de lenguaje del plan de investigación"] },
         { name: "Elaboración del proyecto de investigación", prereqs: ["Diseño y planificación de la investigación"] },
         { name: "Procesos didácticos críticos para la lengua, literatura y matemática", prereqs: ["Estrategias metodológicas para lengua, literatura y matemática"] },
@@ -141,7 +152,7 @@
           "Metodología para el aprendizaje de ciencias sociales y naturales"
         ]}
       ]},
-      { semester: "📗 Séptimo Semestre", subjects: [
+      { semester: "Séptimo Semestre", subjects: [
         { name: "Taller de escritura del plan de investigación", prereqs: [
           "Elaboración del proyecto de investigación",
           "Lectura crítica"
@@ -165,7 +176,7 @@
           "Diseño curricular para la lengua, literatura y matemática superior"
         ]}
       ]},
-      { semester: "📕 Octavo Semestre", subjects: [
+      { semester: "Octavo Semestre", subjects: [
         { name: "Software educativo", prereqs: ["Tecnologías de la información y comunicación (TIC) aplicadas al lenguaje y comunicación"] },
         { name: "Gestión del aprendizaje en Educación Física y Educación Cultural y Artística", prereqs: [] },
         { name: "Trabajo de titulación I", prereqs: [
@@ -182,7 +193,7 @@
           "Diseño, aplicación y evaluación del currículo de las áreas básicas en el subnivel superior"
         ]}
       ]},
-      { semester: "📒 Noveno Semestre", subjects: [
+      { semester: "Noveno Semestre", subjects: [
         { name: "Pensamiento crítico", prereqs: [] },
         { name: "Trabajo de titulación II", prereqs: ["Trabajo de titulación I"] },
         { name: "Gestión institucional a partir de la evaluación y planificación estratégica: Ética personal y social", prereqs: [
